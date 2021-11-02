@@ -1,50 +1,57 @@
+import numpy as np
 import random
 
-population = [[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6], [4, 5, 6, 7]] #List of parents
-population2 = [] #List of parents already used
-parents_to_cross = [] #List for crossover function
-children = [] #List of children
+# Jon’s code 
 
-ind = random.randint(0, (len(population[0]) - 1)) #I do not know where to put this
+def initialize_population(num_individuals: int, lines: int, pins: int):
+    population = np.random.randint(0, pins, size = (num_individuals,lines + 1))
+    for i in range(num_individuals):
+        for j in range(lines + 1):
+            while population[i][j] == population[i][j-1]:
+                population[i][j] = random.randrange(pins)
+    return population
 
-#Function for crossover
-#Creating two new children by swapping parents from randomly selected index
-def crossover(a, b, index):
-    child1 = a[:index] + b[index:]
-    child2 = b[:index] + a[index:]
-    children.append(child1) #Append child to list
-    children.append(child2) #Append child to list
+# Inès’ code
 
-#Main function
-def main(population): #“Population” is a list of all the parents, which are lists of points
-    #Draw two candidates from the population randomly
-    for i in range(int(len(population)/2)):
-        for j in range (2):
-            r_parent = random.choice(population) #Take random parent from population
-            parents_to_cross.append(r_parent) #Append random parent to list
-            population2.append(r_parent)
-            population.remove(r_parent)
-        crossover(parents_to_cross[0], parents_to_cross[1], ind) #Create two children
-        parents_to_cross.clear() #Clear list
-        
-main(population)
+n = 20 # Number of individuals 
+l = 8 # Number of lines
+p = 9 # Number of pins
 
-print("List of parents: ", population)
-print(" ")
-print("List of parents already used: ", population2)
-print(" ")
-print("List for crossover function: ", parents_to_cross)
-print(" ")
-print("List of children: ", children)
+pop = initialize_population(n, l, p) # Initialize population 
+
+print("List of parents: ") 
+print(pop)
+
 print(" ")
 
-population2.append(children)
+pop2 = np.zeros([n, p]) # New population
+chi = np.zeros([2*n, p]) # Parents
+par = np.zeros([2, p]) # Children 
 
-print("New list of parents: ", population2)
+index = random.randint(0, (len(pop[0]) - 1)) # Index for swapping 
 
+for i in range(0, len(pop), 2):
+    m = random.randint(0, (len(pop) - 1)) # Extract random population index
+    r = pop[m]  # Extract random parent 1
+    par[0] = r # Put it in array of parents to cross
+    pop2[0 + i] = par[0] # Put it in new population array
+    pop = np.delete(pop, m, 0) # Erase from population array, so that same parent is not used twice
+    m2 = random.randint(0, (len(pop) - 1)) # Extract random population index
+    r2 = pop[m2] # Extract random parent 2
+    par[1] = r2 # Put it in array of parents to cross
+    pop2[1 + i] = par[1] # Put it in new population array
+    pop = np.delete(pop, m2, 0) # Erase from population array, so that same parent is not used twice
+    chi[0 + i] = np.concatenate((par[0][:index], par[1][index:])) # Crossover, swap after index
+    chi[1 + i] = np.concatenate((par[1][:index], par[0][index:])) # Crossover, swap after index
 
+# Add children to new population array
+for j in range(len(pop2)):
+    chi[len(pop2) + j] = pop2[j]
 
-    
+print("List of parents already used: ")
+print(pop2)
 
+print(" ")
 
-    
+print("List of children: ")
+print(chi)
