@@ -2,10 +2,11 @@ import pygame as pg
 import math
 import numpy as np
 import random
+import sys
 
 # Størrelse på bildet
-w, h = (1000, 1000)
-framerate = 10
+w, h = (800, 800)
+framerate = 60
 
 # Pygame setup
 pg.init()
@@ -39,11 +40,18 @@ while True:
         pg.draw.circle(screen, (255, 0, 0), pin, 4)
 
     # Generer 1000 random tråder
-    artwork = [random.randint(0, 255) for _ in range(1000)]
+    population1 = np.random.randint(0, 256, size=1000+1)
+    #artwork = [random.randint(0, 255) for _ in range(1000)]
+    artwork = population1.tolist()
+
 
     # Tegn trådene
     for i in range(1, len(artwork) - 1):
         pg.draw.aaline(screen, (0, 0, 0), pins[artwork[i - 1]], pins[artwork[i]], 1)
+
+    string_image = pg.image.tostring(screen, 'RGB')
+    temp_surf = pg.image.fromstring(string_image,(w, h),'RGB' )
+    tmp_arr = pg.surfarray.array3d(temp_surf)
     
     # Skriv til tegnebufferet
     pg.display.flip()
