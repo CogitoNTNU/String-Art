@@ -19,7 +19,10 @@ p = 9 # Number of pins
 
 pop = initialize_population(n, l, p) # Initialize population 
 
-print("List of parents: ") 
+print("List of parents: ")
+
+print(" ")
+
 print(pop)
 
 print(" ")
@@ -28,8 +31,9 @@ pop2 = np.zeros([n, p]) # New population
 chi = np.zeros([2*n, p]) # Parents
 par = np.zeros([2, p]) # Children 
 
-index = random.randint(0, (len(pop[0]) - 1)) # Index for swapping 
+index = random.randint(0, (len(pop[0]) - 1)) # Index for swapping
 
+# Crossover
 for i in range(0, len(pop), 2):
     m = random.randint(0, (len(pop) - 1)) # Extract random population index
     r = pop[m]  # Extract random parent 1
@@ -44,14 +48,45 @@ for i in range(0, len(pop), 2):
     chi[0 + i] = np.concatenate((par[0][:index], par[1][index:])) # Crossover, swap after index
     chi[1 + i] = np.concatenate((par[1][:index], par[0][index:])) # Crossover, swap after index
 
+print("List of children before mutation: ")
+
+print(" ")
+
+print(chi[:20])
+
+print(" ")
+
+# Mutate children
+for i2 in range(len(chi)):
+    n = random.randint(0, (len(chi[0]) - 1)) # Extract random index of children array
+    n2 = random.randint(0, (len(chi[0]) - 1)) # Extract random index of children array
+    # Swap values of indexes
+    o = chi[i2][n]
+    chi[i2][n] = chi[i2][n2]
+    chi[i2][n2] = o
+
+print("List of children after mutation: ")
+
+print(" ")
+
+print(chi[:20])
+
+print(" ")
+    
 # Add children to new population array
 for j in range(len(pop2)):
     chi[len(pop2) + j] = pop2[j]
 
 print("List of parents already used: ")
+
+print(" ")
+
 print(pop2)
 
 print(" ")
 
 print("List of children: ")
+
+print(" ")
+
 print(chi)
