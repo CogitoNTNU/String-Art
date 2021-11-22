@@ -5,8 +5,9 @@ import random
 import sys
 
 # Størrelse på bildet
-w, h = (800, 800)
+w, h = (128, 128)
 framerate = 60
+r = h/2
 
 # Pygame setup
 pg.init()
@@ -19,8 +20,8 @@ pins = []
 # Generer 256 spikere i en sirkel med radius 400
 for i in range(256):
     rad = (i / 256.) * 2 * math.pi 
-    x = w / 2 + math.cos(rad) * 400
-    y = h / 2 + math.sin(rad) * 400
+    x = w / 2 + math.cos(rad) * r
+    y = h / 2 + math.sin(rad) * r
     pins.append((x, y))
 
 # Tegn nye string-arts for hver iterasjon i loopen
