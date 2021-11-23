@@ -56,10 +56,11 @@ print(chi[:20])
 
 print(" ")
 
+n = random.randint(0, (len(chi[0]) - 1)) # Extract random index of children array
+n2 = random.randint(0, (len(chi[0]) - 1)) # Extract random index of children array
+
 # Mutate children
 for i2 in range(len(chi)):
-    n = random.randint(0, (len(chi[0]) - 1)) # Extract random index of children array
-    n2 = random.randint(0, (len(chi[0]) - 1)) # Extract random index of children array
     # Swap values of indexes
     o = chi[i2][n]
     chi[i2][n] = chi[i2][n2]
