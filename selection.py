@@ -19,7 +19,7 @@ def selection(population_one, population_two, population_one_fitness, population
     population_start = np.concatenate((population_one, population_two))
     #print('population_start', population_start.shape)
     population_start_fitness = np.concatenate((population_one_fitness, population_two_fitness), axis=None)
-    #print('population_start_fitness', population_start.shape)
+    #print('population_start_fitness', population_start_fitness)
 
     # find index of best fitnesses
     sort_index = population_start_fitness.argsort()

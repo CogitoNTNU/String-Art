@@ -37,7 +37,7 @@ def crossover(population, top_ratio, bottom_ratio, mutation_rate, pins):
         par_one = population_final[random_parents_num[i%pop_len]]
         par_two = population_final[random_parents_num[i%pop_len+1]]
         mutation_pins = np.random.randint(0, pins, size=lines_plus_one)
-        print('mutation_pins', mutation_pins)
+        #print('mutation_pins', mutation_pins)
         for j in range(lines_plus_one):
             children[i][j] = np.random.choice([par_one[j], par_two[j], mutation_pins[j]], p=[non_mutation_rate, non_mutation_rate, mutation_rate])
             children[i+1][j] = np.random.choice([par_one[j], par_two[j], mutation_pins[j]], p=[non_mutation_rate, non_mutation_rate, mutation_rate])

@@ -15,19 +15,20 @@ start_time = time.time()
 
 
 # NUM_INDUVIDUALS MUST BE power of two
-epoch = 1
-num_individual = 16
-lines = 8
-pins = 8
+epoch = 128
+num_individual = 256
+lines = 1000
+pins = 256
 top_ratio = 2
-bottom_ratio = 4
-mutation_rate = 0.02
-image_path = 'test-square-frame-64.png'
+bottom_ratio = 8
+mutation_rate = 0.125
+image_path = 'space-woman.jpg'
 line_thickness = 1
 line_color= (0,0,0)
 
 image = cv.imread(image_path)
 image = cv.cvtColor(image, cv.COLOR_RGB2GRAY)
+cv.imwrite('gray.png', image)
 w, h = image.shape
 r = h/2
 pins_xy = np.zeros(pins, dtype=np.dtype((np.int32, 2)))
@@ -39,29 +40,41 @@ for i in range(pins):
 
 
 first_fitness = 0
-print('epcoch: 1')
+print('Total epochs:', epoch)
+print('Epoch: 1')
 
 init_pop = initialize_population(num_individual, lines, pins)
-fitness_of_pop = fit(init_pop, image, pins_xy, line_color, line_thickness)
-first_fitness = fitness_of_pop[0]
+fitness_of_pop_init = fit(init_pop, image, pins_xy, line_color, line_thickness)
+first_fitness = fitness_of_pop_init[0]
 
-new_gen = crossover(init_pop, top_ratio, bottom_ratio, mutation_rate, pins)
-fitness_new_gen = fit(new_gen, image, pins_xy, line_color, line_thickness)
-best_pop, new_fitness = selection(init_pop, new_gen, fitness_of_pop, fitness_new_gen)
-
-
-
-for i in range(epoch-1):
-    new_gen = crossover(init_pop, top_ratio, bottom_ratio, mutation_rate, pins)
-    fitness_new_gen = fit(new_gen, image, pins)
-    best_pop, new_fitness = selection(best_pop, new_gen, new_fitness, fitness_new_gen)
-   
-    print('epcoch:', i+2)
+child_gen = crossover(init_pop, top_ratio, bottom_ratio, mutation_rate, pins)
+fitness_child_gen = fit(child_gen, image, pins_xy, line_color, line_thickness)
+best_pop, new_fitness = selection(init_pop, child_gen, fitness_of_pop_init, fitness_child_gen)
 
 
 string_images = draw_strings(image, pins_xy, best_pop, line_color, line_thickness)
-print('first fitness', first_fitness)
-print('final fitness', new_fitness[0])
-print('diff:', (new_fitness[0] - first_fitness))
-print('Time(min):', (time.time()- start_time)/60)
-#cv.imwrite('test.png', string_images[0])
+cv.imwrite('test.png', string_images[0])
+
+for i in range(epoch-1):
+    child_gen = crossover(best_pop, top_ratio, bottom_ratio, mutation_rate, pins)
+    fitness_child_gen = fit(child_gen, image, pins_xy, line_color, line_thickness)
+    best_pop, new_fitness = selection(best_pop, child_gen, new_fitness, fitness_child_gen)
+   
+    print('Epoch:', i+2)
+    if (i+2)%16 == 0:
+        print('Percent improvment:{:.3f}%'.format((new_fitness[0]-first_fitness)/first_fitness*100))
+        string_images = draw_strings(image, pins_xy, best_pop, line_color, line_thickness)
+        cv.imwrite('test.png', string_images[0])
+
+
+
+
+
+print('First fitness', first_fitness)
+print('Final fitness', new_fitness[0])
+print('Diff:{:.3f}'.format((new_fitness[0] - first_fitness)))
+print('Percent improvment:{:.3f}%'.format((new_fitness[0]-first_fitness)/first_fitness*100))
+print('Time(min):{:.3f}'.format((time.time()- start_time)/60))
+print('Time(sec) per epoch:{:.3f}'.format((time.time()- start_time)/epoch))
+string_images = draw_strings(image, pins_xy, best_pop, line_color, line_thickness)
+cv.imwrite('test.png', string_images[0])

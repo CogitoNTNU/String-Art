@@ -15,7 +15,9 @@ def fit(population, image, pins_xy, line_color, line_thickness):
     for i in range(len(string_images)):
         fitness[i] = ssim(image, string_images[i])
 
+    #print('fitness', fitness)
     return fitness
+
 
 
 
