@@ -15,9 +15,9 @@ start_time = time.time()
 
 
 # NUM_INDUVIDUALS MUST BE power of two
-epoch = 128
+epoch = 512
 num_individual = 256
-lines = 1000
+lines = 512
 pins = 256
 top_ratio = 2
 bottom_ratio = 8
