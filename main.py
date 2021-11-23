@@ -14,12 +14,12 @@ start_time = time.time()
 
 
 # NUM_INDUVIDUALS MUST BE power of two
-epoch = 2
-num_individual = 8
+epoch = 1
+num_individual = 4
 lines = 8
-pins = 16
+pins = 4
 top_ratio = 2
-bottom_ratio = 4
+bottom_ratio = 2
 mutation_rate = 0.02
 image_path = 'test-square-frame-64.png'
 line_thickness = 1
@@ -75,18 +75,8 @@ for i in range(epoch-1):
 '''
 
 
-pins_xy = np.zeros(pins, dtype=np.dtype((np.int32, 2)))
-
-for i in range(pins):
-    rad = (i / pins) * 2 * math.pi 
-    x = (w-1) / 2 + math.cos(rad) * r
-    y = (h-1) / 2 + math.sin(rad) * r
-    pins_xy[i] = (x,y)
-
-string_image = np.full((w, h), 255, dtype=np.double)
-for j in range(1, len(best_pop[0])): # posibly add back -1
-    cv.line(string_image, pins_xy[best_pop[0][j-1]], pins_xy[best_pop[0][j]], color=line_color, thickness=line_thickness, lineType=cv.LINE_AA)
+string_images = draw(image, pins, population, line_color, line_thickness)
 print(new_fitness[0])
 print('diff:', (new_fitness[0] - first_fitness)*100)
 print('Time(min):', (time.time()- start_time)/60)
-cv.imwrite('test.png', string_image)
+cv.imwrite('test.png', string_images[0])
