@@ -16,18 +16,19 @@ start_time = time.time()
 
 
 # NUM_INDUVIDUALS MUST BE power of two
-epoch = 128
+epoch = 80
 num_individual = 256
-lines = 200
-pins = 256
+lines = 96
+pins = 96
 top_ratio = 4
-bottom_ratio = 8
+bottom_ratio = 16
 mutation_rate = 0.125
-image_path = 'img/test-circle-frame.png'
+image_path = 'img/test-circle-frame-64.png'
 out_path_gif = 'C:/Users/jonrodtang/code/cogito/String-Art/out/outgif.gif'
 out_path_png = 'out/out.png'
+first_path_png = 'out/first.png'
 line_thickness = 1
-line_color= (0,0,0)
+line_color = (0,0,0)
 
 image = cv.imread(image_path)
 image = cv.cvtColor(image, cv.COLOR_RGB2GRAY)
@@ -42,7 +43,7 @@ for i in range(pins):
     pins_xy[i] = (x,y)
 
 extra_frames = epoch//2
-images = [0] * (epoch*2+extra_frames)
+images = [0] * epoch
 
 
 
@@ -63,6 +64,7 @@ best_pop, new_fitness = selection(init_pop, child_gen, fitness_of_pop_init, fitn
 
 string_images = draw_strings(image, pins_xy, best_pop, line_color, line_thickness)
 images[0] = string_images[0]
+cv.imwrite(first_path_png, string_images[0])
 
 for i in range(1,epoch):
     child_gen = crossover(best_pop, top_ratio, bottom_ratio, mutation_rate, pins)
@@ -74,8 +76,6 @@ for i in range(1,epoch):
     string_images = draw_strings(image, pins_xy, best_pop, line_color, line_thickness)
     images[i] = string_images[0]
 
-for i in range(extra_frames):
-    images[epoch+i] = string_images[0]
 
 
 
