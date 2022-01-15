@@ -2,25 +2,26 @@ import numpy as np
 from skimage.metrics import structural_similarity as ssim
 import sys
 from draw import draw_strings
-import concurrent.futures as cf
-from itertools import repeat
-from multiprocessing import cpu_count
+import ray
 
 np.set_printoptions(threshold=sys.maxsize)
 
- 
+@ray.remote
+def ssim_remote(image, string_image):
+    return ssim(image, string_image)
  
 def fit(population, image, pins_xy, line_color, line_thickness):
 
     fitness = np.zeros((len(population)), dtype=np.double)
 
     string_images = draw_strings(image.shape, pins_xy, population, line_color, line_thickness)
+    
+    obj_ref = []
+    for img in string_images:
+        obj_ref.append(ssim_remote.remote(image, img))
 
-    with cf.ProcessPoolExecutor(max_workers=cpu_count()) as executor:
-        results = executor.map(ssim, repeat(image), string_images)
-
-        for i, r in enumerate(results):
-            fitness[i] = r
+    for i, f in enumerate(obj_ref):
+        fitness[i] = ray.get(f)
 
 
     return fitness
