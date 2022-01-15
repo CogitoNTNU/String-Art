@@ -16,14 +16,14 @@ start_time = time.time()
 
 
 # NUM_INDUVIDUALS MUST BE power of two
-epoch = 128
+epoch = 16
 num_individual = 256
 lines = 80
 pins = 96
 top_ratio = 4
 bottom_ratio = 16
 mutation_rate = 0.125
-image_path = 'img/baby-tux.png'
+image_path = 'img/test-circle-frame-64.png'
 out_path_gif = 'C:/Users/jonrodtang/code/cogito/String-Art/out/outgif.gif'
 out_path_png = 'out/out.png'
 first_path_png = 'out/first.png'
