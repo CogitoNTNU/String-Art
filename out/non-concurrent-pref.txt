@@ -1,0 +1,6 @@
+First fitness 0.12512823422213948
+Final fitness 0.571979870257663
+Diff:0.447
+Percent improvment:357.115%
+Time(min):4.387
+Time(sec) per epoch:2.056
