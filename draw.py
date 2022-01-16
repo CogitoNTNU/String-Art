@@ -10,7 +10,7 @@ def draw_strings(image_shape, pins_xy, population, line_color, line_thickness):
     (w, h) = image_shape
     population_images = np.zeros(shape=(len(population), w, h), dtype=np.uint8)
 
-    with cf.ProcessPoolExecutor(max_workers=cpu_count()) as executor:
+    with cf.ThreadPoolExecutor(max_workers=cpu_count()) as executor:
         results = executor.map(draw, population, repeat(line_color), repeat(line_thickness), repeat(pins_xy), repeat(image_shape))
 
         for i, r in enumerate(results):

@@ -16,7 +16,7 @@ def fit(population, image, pins_xy, line_color, line_thickness):
 
     string_images = draw_strings(image.shape, pins_xy, population, line_color, line_thickness)
 
-    with cf.ProcessPoolExecutor(max_workers=cpu_count()) as executor:
+    with cf.ThreadPoolExecutor(max_workers=cpu_count()) as executor:
         results = executor.map(ssim, repeat(image), string_images)
 
         for i, r in enumerate(results):
