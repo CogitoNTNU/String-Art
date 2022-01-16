@@ -13,7 +13,7 @@ import ray
 
 
 def main():
-    ray.init()
+    ray.init(num_cpus=4)
     np.set_printoptions(threshold=sys.maxsize)
     
 
