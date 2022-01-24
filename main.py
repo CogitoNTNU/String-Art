@@ -3,7 +3,7 @@ from init import initialize_population
 import cv2 as cv
 from fit import fit
 from selection import selection
-from draw import draw_strings, draw
+from draw import draw
 import numpy as np
 import sys
 import time
