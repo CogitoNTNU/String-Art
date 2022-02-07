@@ -3,17 +3,14 @@ from init import initialize_population
 import cv2 as cv
 from fit import fit
 from selection import selection
-from draw import draw_strings, draw
+from draw import draw
 import numpy as np
 import sys
 import time
 import math
 import imageio
-import ray
-
 
 def main():
-    ray.init(num_cpus=4)
     np.set_printoptions(threshold=sys.maxsize)
     
 
@@ -60,7 +57,7 @@ def main():
 
     first_fitness = 0
     print(f'Total epochs:{epoch}')
-    print('Epoch: 1')
+    print('Epoch:1')
     start_time = time.time()
 
     init_pop = initialize_population(num_individual, lines, pins)
@@ -71,7 +68,7 @@ def main():
     fitness_child_gen = fit(child_gen, image, pins_xy, line_color, line_thickness)
     best_pop, new_fitness = selection(init_pop, child_gen, fitness_of_pop_init, fitness_child_gen)
 
-    string_image = ray.get(draw.remote(best_pop[0], line_color, line_thickness, pins_xy, image.shape))
+    string_image = draw(best_pop[0], line_color, line_thickness, pins_xy, image.shape)
     images[0] = string_image
     cv.imwrite(first_path_png, string_image)
 
@@ -82,12 +79,11 @@ def main():
         best_pop, new_fitness = selection(best_pop, child_gen, new_fitness, fitness_child_gen)
     
         print(f'Percent improvment:{(new_fitness[0]-first_fitness)/first_fitness*100:.3f}%')
-        images[i] = ray.get(draw.remote(best_pop[0], line_color, line_thickness, pins_xy, image.shape))
+        images[i] = draw(best_pop[0], line_color, line_thickness, pins_xy, image.shape)
 
 
 
 
-    #TODO: Convert to f strings
     print(f'First fitness{first_fitness}')
     print(f'Final fitness{new_fitness[0]}')
     print(f'Diff:{(new_fitness[0] - first_fitness):.3f}')
