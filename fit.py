@@ -2,6 +2,7 @@ import numpy as np
 from skimage.metrics import structural_similarity as ssim
 import sys
 from draw import draw_strings
+import multiprocessing
 
 
 np.set_printoptions(threshold=sys.maxsize)
