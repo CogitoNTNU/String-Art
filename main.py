@@ -9,9 +9,7 @@ import sys
 import time
 import math
 import imageio
-from numba import njit
 
-@njit(nogil=True,cache=True)
 def main():
     np.set_printoptions(threshold=sys.maxsize)
     
@@ -58,7 +56,7 @@ def main():
 
 
     first_fitness = 0
-    print('Total epochs:{epoch}'.format(epoch))
+    print(f'Total epochs:{epoch}')
     print('Epoch:1')
     start_time = time.time()
 
@@ -75,23 +73,23 @@ def main():
     cv.imwrite(first_path_png, string_image)
 
     for i in range(1,epoch):
-        print('Epoch:',i+1)
+        print(f'Epoch:{i+1}')
         child_gen = crossover(best_pop, top_ratio, bottom_ratio, mutation_rate, pins)
         fitness_child_gen = fit(child_gen, image, pins_xy, line_color, line_thickness)
         best_pop, new_fitness = selection(best_pop, child_gen, new_fitness, fitness_child_gen)
     
-        print('Percent improvment:{:.3f}%'.format((new_fitness[0]-first_fitness)/first_fitness*100))
+        print(f'Percent improvment:{(new_fitness[0]-first_fitness)/first_fitness*100:.3f}%')
         images[i] = draw(best_pop[0], line_color, line_thickness, pins_xy, image.shape)
 
 
 
 
-    print('First fitness', first_fitness)
-    print('Final fitness',new_fitness[0])
-    print('Diff:{:.3f}'.format((new_fitness[0] - first_fitness)))
-    print('Percent improvment:{:.3f}%'.format((new_fitness[0]-first_fitness)/first_fitness*100))
-    print('Time(min):{:.3f}'.format((time.time()- start_time)/60))
-    print('Time(sec) per epoch:{:.3f}'.format((time.time()- start_time)/epoch))
+    print(f'First fitness{first_fitness}')
+    print(f'Final fitness{new_fitness[0]}')
+    print(f'Diff:{(new_fitness[0] - first_fitness):.3f}')
+    print(f'Percent improvment:{(new_fitness[0]-first_fitness)/first_fitness*100:.3f}%')
+    print(f'Time(min):{(time.time()- start_time)/60:.3f}')
+    print(f'Time(sec) per epoch:{(time.time()- start_time)/epoch:.3f}')
     cv.imwrite(out_path_png, images[-1])
     imageio.mimsave(out_path_gif, images)
 
